@@ -27,6 +27,9 @@ No medical knowledge required. No complex setup. Just upload and get answers!
 
 ## ✨ Features
 
+### 🌟 **Free for Public Use!**
+The live deployment at **https://med-bill-analyzer.vercel.app/** is free to use - no API key needed! Built by an 18-year-old from Nepal to help people worldwide understand medical pricing.
+
 ### 🤖 Smart AI Analysis
 - **Auto-detects** bill country from currency symbols, hospital names, and phone codes
 - **Cross-country comparison** - Compare Nepal bill to USA prices, or vice versa
@@ -53,6 +56,38 @@ Currently supports:
 - **No data storage** - your bills stay on your device
 - **Secure API calls** - direct to OpenRouter AI
 - **Open source** - see exactly what the code does
+
+---
+
+## 📸 UI/UX Showcase
+
+### 🏠 Homepage - Upload & Select Countries
+![Homepage](./public/screenshots/home-page.png)
+*Clean, intuitive interface with country selection and drag-and-drop upload*
+
+### 📊 Analysis Results - Detailed Breakdown
+![Analysis Results](./public/screenshots/results-nepali.png)
+*Comprehensive analysis with location mismatch warnings, savings breakdown, and fair price recommendations*
+
+### 📜 History - Track Your Analyses
+![History Page](./public/screenshots/history-page.png)
+*See all your past analyses, total savings, and quick access to previous scans*
+
+### ❓ FAQ Page - Bilingual Support
+![FAQ in Nepali](./public/screenshots/faq-nepali.png)
+*Full support for नेपाली language - making it accessible to local users*
+
+### ⏳ Real-Time Analysis
+![Analyzing](./public/screenshots/analyzing.png)
+*Beautiful loading states with progress indicators in both English and Nepali*
+
+**Key UI Features:**
+- ✅ Mobile-responsive design
+- ✅ Bilingual interface (English & नेपाली)
+- ✅ Smooth animations & transitions
+- ✅ Clear visual hierarchy
+- ✅ Accessible color contrast
+- ✅ PWA-ready for offline use
 
 ---
 
