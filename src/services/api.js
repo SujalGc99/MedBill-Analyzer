@@ -176,19 +176,22 @@ export const analyzeReceipt = async (imageBase64, targetCountry = 'Nepal', origi
         const validation = validateCompleteAnalysis(parsedResult, detectionData);
 
         // Log warnings to console but don't fail
-        if (validation.warnings.length > 0) {
+        if (validation.warnings && validation.warnings.length > 0) {
             console.warn('Analysis Warnings:', validation.warnings);
         }
 
         // Only fail if there are hard errors
         if (!validation.valid) {
             console.error('Validation Errors:', validation.errors);
-            throw new Error(`Analysis validation failed: ${validation.errors[0]}`);
+            const errorMessage = validation.errors && validation.errors.length > 0
+                ? validation.errors.filter(e => e).join('; ')
+                : 'Unknown validation error';
+            throw new Error(`Analysis validation failed: ${errorMessage}`);
         }
 
         // Attach validation metadata
         parsedResult._validation = {
-            warnings: validation.warnings,
+            warnings: validation.warnings || [],
             stats: validation.stats
         };
 

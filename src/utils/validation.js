@@ -231,16 +231,17 @@ export const validateCurrencyConsistency = (data) => {
     }
 
     // All items should use consistent pricing
-    // (We can't check currency directly from item prices, but we can check for consistency)
     const errors = [];
+    const warnings = [];
 
-    // Check totals make sense
+    // Check totals make sense (but be lenient - bills often have fees, taxes, etc.)
     const itemsSum = data.items.reduce((sum, item) => sum + (item.chargedPrice || 0), 0);
     const totalDifference = Math.abs(itemsSum - data.originalTotal);
 
-    // Allow 1% difference for rounding
-    if (totalDifference > itemsSum * 0.01) {
-        errors.push(`Items sum (${itemsSum.toFixed(2)}) does not match originalTotal (${data.originalTotal}). Difference: ${totalDifference.toFixed(2)}`);
+    // Allow 15% difference for rounding, taxes, service charges, etc.
+    // Changed to WARNING instead of error - total mismatch shouldn't block analysis
+    if (totalDifference > itemsSum * 0.15) {
+        warnings.push(`Items sum (${itemsSum.toFixed(2)}) differs from total (${data.originalTotal}). May include unlisted fees/taxes.`);
     }
 
     // Check optimized total <= original total
@@ -257,9 +258,9 @@ export const validateCurrencyConsistency = (data) => {
     }
 
     return {
-        valid: errors.length === 0,
+        valid: errors.length === 0,  // Only fail on critical errors
         errors,
-        warnings: errors.length > 0 ? ['Currency calculations may be incorrect'] : []
+        warnings
     };
 };
 
@@ -310,20 +311,26 @@ export const validateCompleteAnalysis = (data, detectionData = null) => {
     // Price range validation
     const priceCheck = validatePriceRanges(data.items);
     if (!priceCheck.valid) {
-        errors.push(...priceCheck.errors);
+        errors.push(...(priceCheck.errors || []));
     }
-    warnings.push(...priceCheck.warnings);
+    if (priceCheck.warnings && priceCheck.warnings.length > 0) {
+        warnings.push(...priceCheck.warnings);
+    }
 
     // Currency consistency validation
     const currencyCheck = validateCurrencyConsistency(data);
     if (!currencyCheck.valid) {
-        errors.push(currencyCheck.error);
+        errors.push(currencyCheck.error || 'Currency validation failed');
     }
-    warnings.push(...currencyCheck.warnings);
+    if (currencyCheck.warnings && currencyCheck.warnings.length > 0) {
+        warnings.push(...currencyCheck.warnings);
+    }
 
     // Confidence score validation
     const confidenceCheck = validateConfidenceScores(data.items);
-    warnings.push(...confidenceCheck.warnings);
+    if (confidenceCheck.warnings && confidenceCheck.warnings.length > 0) {
+        warnings.push(...confidenceCheck.warnings);
+    }
 
     // Location validation if detection data provided
     if (detectionData && detectionData.warnings) {
