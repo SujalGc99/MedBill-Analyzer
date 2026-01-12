@@ -188,9 +188,9 @@ export const validatePriceRanges = (items) => {
             continue;
         }
 
-        // Check fairPriceMin < fairPriceMax
-        if (item.fairPriceMin >= item.fairPriceMax) {
-            errors.push(`Item ${i + 1} (${item.name}): fairPriceMin (${item.fairPriceMin}) must be less than fairPriceMax (${item.fairPriceMax})`);
+        // Check fairPriceMin <= fairPriceMax (allow equal values for exact prices)
+        if (item.fairPriceMin > item.fairPriceMax) {
+            errors.push(`Item ${i + 1} (${item.name}): fairPriceMin (${item.fairPriceMin}) cannot be greater than fairPriceMax (${item.fairPriceMax})`);
         }
 
         // Check for unreasonable ranges - WARNING ONLY, not error
