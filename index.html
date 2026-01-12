@@ -1,23 +1,69 @@
 <!doctype html>
 <html lang="en">
 
-<!-- Open Graph / Social Media -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="MedBill Analyzer - Fair Medical Pricing" />
-<meta property="og:description"
-  content="AI-powered medical bill analyzer. Detect overpriced items and ensure fair healthcare pricing." />
-<meta property="og:site_name" content="MedBill Analyzer" />
+<head>
+  <meta name="description"
+    content="Free AI-powered medical bill optimizer and analyzer. Check if your hospital bill is fair, detect overcharges, and compare medical prices worldwide. Instant results." />
+  <meta name="keywords"
+    content="medical bill optimizer, medical bill analyzer, hospital bill check, fair price calculator, medical bill audit, healthcare pricing transparency, save money on medical bills, Nepal healthcare prices, AI medical bill review" />
+  <meta name="author" content="Sujal GC" />
 
-<!-- PWA -->
-<link rel="apple-touch-icon" href="/icons/pwa-192x192.png" />
-<title>MedBill Analyzer - Fair Medical Pricing</title>
-<script>
-  window.deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    window.deferredPrompt = e;
-  });
-</script>
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://med-bill-analyzer.vercel.app/" />
+
+  <!-- Robots -->
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://med-bill-analyzer.vercel.app/" />
+  <meta property="og:title" content="MedBill Analyzer - Free Medical Bill Optimizer & Checker" />
+  <meta property="og:description"
+    content="Don't overpay for healthcare. Upload your medical bill to detect overcharges and compare prices instantly with AI. Free to use." />
+  <meta property="og:image" content="https://med-bill-analyzer.vercel.app/hero-banner.png" />
+  <meta property="og:site_name" content="MedBill Analyzer" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://med-bill-analyzer.vercel.app/" />
+  <meta name="twitter:title" content="MedBill Analyzer - Check Your Hospital Bill Fairness" />
+  <meta name="twitter:description"
+    content="AI-powered medical bill analysis. Detect overpriced items and ensure fair healthcare pricing." />
+  <meta name="twitter:image" content="https://med-bill-analyzer.vercel.app/hero-banner.png" />
+
+  <!-- PWA -->
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <title>MedBill Analyzer - Free Medical Bill Optimizer</title>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "MedBill Analyzer",
+      "operatingSystem": "Web",
+      "applicationCategory": "HealthApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "AI-powered tool to analyze medical bills, detect overcharging, and compare healthcare prices across different countries.",
+      "author": {
+        "@type": "Person",
+        "name": "Sujal GC"
+      },
+      "featureList": "Medical bill analysis, Price comparison, Overcharge detection, Fair price estimation",
+      "screenshot": "https://med-bill-analyzer.vercel.app/screenshots/home-page.png"
+    }
+  </script>
+  <script>
+    window.deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      window.deferredPrompt = e;
+    });
+  </script>
 </head>
 
 <body>

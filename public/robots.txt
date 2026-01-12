@@ -1,6 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://medbill-analyzer.vercel.app/sitemap.xml
-
-# Disallow API routes if any
-Disallow: /api/
+Sitemap: https://med-bill-analyzer.vercel.app/sitemap.xml
