@@ -1,77 +1,30 @@
-// Summary Card - displays total savings and stats
-
-import { TrendingDown, DollarSign, Receipt, Percent } from 'lucide-react';
-import { formatCurrency, calculateSavingsPercent } from '../../utils/formatting';
+// SummaryCard.jsx
+import React from 'react';
 import Card from '../common/Card';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { formatCurrency } from '../../utils/formatting';
 
 export const SummaryCard = ({ result, country = 'Nepal' }) => {
-    const { originalTotal, optimizedTotal, totalSavings, items } = result;
-
-    const savingsPercent = calculateSavingsPercent(originalTotal, optimizedTotal);
-    const overchargedCount = items.filter(item => item.status === 'overpriced').length;
+    const { t } = useLanguage();
+    const { originalTotal, optimizedTotal, totalSavings, savingsPercentage } = result;
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {/* Original Total */}
-            <Card compact>
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-sm text-neutral-600 mb-1">Original Total</p>
-                        <p className="text-2xl font-bold text-neutral-900">
-                            {formatCurrency(originalTotal, country)}
-                        </p>
-                    </div>
-                    <div className="p-3 bg-neutral-100 rounded-lg">
-                        <Receipt className="h-6 w-6 text-neutral-600" />
-                    </div>
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+            <Card>
+                <div className="text-xs sm:text-sm font-medium text-neutral-500 mb-1">{t('history.totalAnalyzed')}</div>
+                <div className="text-xl sm:text-2xl font-bold text-neutral-900">{formatCurrency(originalTotal)}</div>
             </Card>
 
-            {/* Optimized Total */}
-            <Card compact>
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-sm text-neutral-600 mb-1">Fair Price</p>
-                        <p className="text-2xl font-bold text-success-600">
-                            {formatCurrency(optimizedTotal, country)}
-                        </p>
-                    </div>
-                    <div className="p-3 bg-success-100 rounded-lg">
-                        <DollarSign className="h-6 w-6 text-success-600" />
-                    </div>
-                </div>
+            <Card>
+                <div className="text-xs sm:text-sm font-medium text-neutral-500 mb-1">{t('analysis.fairPrice')}</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary-600">{formatCurrency(optimizedTotal)}</div>
             </Card>
 
-            {/* Total Savings */}
-            <Card compact>
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-sm text-neutral-600 mb-1">You Can Save</p>
-                        <p className="text-2xl font-bold text-primary-600">
-                            {formatCurrency(totalSavings, country)}
-                        </p>
-                    </div>
-                    <div className="p-3 bg-primary-100 rounded-lg">
-                        <TrendingDown className="h-6 w-6 text-primary-600" />
-                    </div>
-                </div>
-            </Card>
-
-            {/* Savings Percentage */}
-            <Card compact>
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-sm text-neutral-600 mb-1">Savings</p>
-                        <p className="text-2xl font-bold text-danger-600">
-                            {savingsPercent.toFixed(1)}%
-                        </p>
-                        <p className="text-xs text-neutral-500 mt-1">
-                            {overchargedCount} of {items.length} items overpriced
-                        </p>
-                    </div>
-                    <div className="p-3 bg-danger-100 rounded-lg">
-                        <Percent className="h-6 w-6 text-danger-600" />
-                    </div>
+            <Card className="bg-primary-50 border-primary-100">
+                <div className="text-xs sm:text-sm font-medium text-primary-700 mb-1">{t('history.totalSavings')}</div>
+                <div className="flex items-baseline gap-2">
+                    <span className="text-xl sm:text-2xl font-bold text-primary-700">{formatCurrency(totalSavings)}</span>
+                    <span className="text-sm sm:text-base font-semibold text-primary-600">({savingsPercentage}%)</span>
                 </div>
             </Card>
         </div>

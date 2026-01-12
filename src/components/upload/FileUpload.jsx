@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Upload, FileImage, AlertCircle } from 'lucide-react';
-import { validateImage } from '../../utils/imageProcessing';
+import { validateImage } from '../../utils/validation';
 
 export const FileUpload = ({ onFileSelect, disabled = false }) => {
     const [isDragging, setIsDragging] = useState(false);

@@ -7,18 +7,33 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment variables
+# Environment variables - CRITICAL: Never commit these!
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
 
+# API Keys and Secrets - Additional safety
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Build outputs
 node_modules
 dist
 dist-ssr
+build
 *.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -26,3 +41,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OS specific
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Testing
+coverage
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# Sensitive data
+receipts/
+uploads/
+user-data/

@@ -9,12 +9,19 @@ export const formatCurrency = (amount, country = 'Nepal') => {
         'India': 'INR',
         'Bangladesh': 'BDT',
         'Pakistan': 'PKR',
+        'USA': 'USD',
+        'Russia': 'RUB',
     };
 
     const currency = currencyMap[country] || 'NPR';
 
+    // Set locale based on currency for proper formatting ($ vs Rs)
+    let locale = 'en-NP';
+    if (currency === 'USD') locale = 'en-US';
+    if (currency === 'RUB') locale = 'ru-RU';
+
     // Format with 2 decimal places and thousands separator
-    const formatted = new Intl.NumberFormat('en-NP', {
+    const formatted = new Intl.NumberFormat(locale, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
     }).format(amount);
@@ -98,6 +105,7 @@ export const getStatusBadgeClass = (status) => {
     const classes = {
         fair: 'badge-fair',
         overpriced: 'badge-overpriced',
+        cheap: 'badge-success',
         uncertain: 'badge-warning',
     };
     return classes[status] || 'badge-warning';

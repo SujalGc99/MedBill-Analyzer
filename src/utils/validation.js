@@ -46,7 +46,7 @@ export const validateAnalysisResponse = (data) => {
         }
 
         // Validate status
-        if (!['fair', 'overpriced'].includes(item.status)) {
+        if (!['fair', 'overpriced', 'cheap'].includes(item.status)) {
             return { valid: false, error: `Invalid status: ${item.status}` };
         }
     }
@@ -111,8 +111,233 @@ export const parseJSON = (text) => {
         cleaned = cleaned.replace(/^```\s*/i, '');
         cleaned = cleaned.replace(/\s*```$/i, '');
 
+        // Remove comments (//... or /*...*/)
+        cleaned = cleaned.replace(/\/\/.*$/gm, '');
+        cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, '');
+
         return JSON.parse(cleaned);
     } catch (error) {
         throw new Error(`Failed to parse JSON: ${error.message}`);
     }
+};
+
+/**
+ * Validate location detection response
+ */
+export const validateLocationDetection = (data) => {
+    if (!data) {
+        return { valid: false, error: 'No location detection data received' };
+    }
+
+    const requiredFields = ['detectedCountry', 'detectedCurrency', 'confidence', 'evidence'];
+    for (const field of requiredFields) {
+        if (!(field in data)) {
+            return { valid: false, error: `Missing required field: ${field}` };
+        }
+    }
+
+    // Validate confidence value
+    if (!['high', 'medium', 'low'].includes(data.confidence)) {
+        return { valid: false, error: `Invalid confidence value: ${data.confidence}` };
+    }
+
+    // Validate evidence is an array
+    if (!Array.isArray(data.evidence)) {
+        return { valid: false, error: 'Evidence must be an array' };
+    }
+
+    // Warnings is optional but must be array if present
+    if (data.warnings && !Array.isArray(data.warnings)) {
+        return { valid: false, error: 'Warnings must be an array' };
+    }
+
+    return { valid: true };
+};
+
+/**
+ * Check if detected location matches user selection
+ */
+export const validateLocationMatch = (detectedCountry, userSelectedCountry) => {
+    const normalizedDetected = detectedCountry.toLowerCase().trim();
+    const normalizedSelected = userSelectedCountry.toLowerCase().trim();
+
+    const isMatch = normalizedDetected === normalizedSelected;
+
+    return {
+        isMatch,
+        warning: !isMatch
+            ? `Warning: Detected location (${detectedCountry}) does not match your selection (${userSelectedCountry}). Results may be inaccurate.`
+            : null
+    };
+};
+
+/**
+ * Validate price ranges in analysis items
+ * Ensures fairPriceMin < fairPriceMax and ranges are reasonable
+ */
+export const validatePriceRanges = (items) => {
+    const errors = [];
+    const warnings = [];
+
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+
+        // Check if fair prices exist
+        if (!('fairPriceMin' in item) || !('fairPriceMax' in item)) {
+            errors.push(`Item ${i + 1} (${item.name}): Missing fairPriceMin or fairPriceMax`);
+            continue;
+        }
+
+        // Check fairPriceMin < fairPriceMax
+        if (item.fairPriceMin >= item.fairPriceMax) {
+            errors.push(`Item ${i + 1} (${item.name}): fairPriceMin (${item.fairPriceMin}) must be less than fairPriceMax (${item.fairPriceMax})`);
+        }
+
+        // Check for unreasonable ranges - WARNING ONLY, not error
+        const chargedPrice = item.chargedPrice;
+        const fairAvg = (item.fairPriceMin + item.fairPriceMax) / 2;
+
+        if (chargedPrice > 0 && fairAvg > 0) {
+            const ratio = chargedPrice / fairAvg;
+
+            // Warn about suspicious ratios (but don't fail)
+            // Some expensive procedures can legitimately be 100x+ overpriced
+            if (ratio > 100) {
+                warnings.push(`Item ${i + 1} (${item.name}): Very high price ratio (charged: ${chargedPrice.toLocaleString()}, fair avg: ${fairAvg.toFixed(2)}). Ratio: ${ratio.toFixed(1)}x - AI may have inaccurate price data.`);
+            } else if (ratio < 0.01) {
+                warnings.push(`Item ${i + 1} (${item.name}): Very low price ratio (charged: ${chargedPrice.toLocaleString()}, fair avg: ${fairAvg.toFixed(2)}). Ratio: ${ratio.toFixed(3)}x - AI may have inaccurate price data.`);
+            }
+        }
+
+        // Check for negative prices (this IS an error)
+        if (item.chargedPrice < 0 || item.fairPriceMin < 0 || item.fairPriceMax < 0) {
+            errors.push(`Item ${i + 1} (${item.name}): Prices cannot be negative`);
+        }
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors,
+        warnings
+    };
+};
+
+/**
+ * Validate currency consistency across all items
+ */
+export const validateCurrencyConsistency = (data) => {
+    if (!data.currency) {
+        return { valid: false, error: 'No currency specified in response' };
+    }
+
+    // All items should use consistent pricing
+    // (We can't check currency directly from item prices, but we can check for consistency)
+    const errors = [];
+
+    // Check totals make sense
+    const itemsSum = data.items.reduce((sum, item) => sum + (item.chargedPrice || 0), 0);
+    const totalDifference = Math.abs(itemsSum - data.originalTotal);
+
+    // Allow 1% difference for rounding
+    if (totalDifference > itemsSum * 0.01) {
+        errors.push(`Items sum (${itemsSum.toFixed(2)}) does not match originalTotal (${data.originalTotal}). Difference: ${totalDifference.toFixed(2)}`);
+    }
+
+    // Check optimized total <= original total
+    if (data.optimizedTotal > data.originalTotal) {
+        errors.push(`Optimized total (${data.optimizedTotal}) cannot be greater than original total (${data.originalTotal})`);
+    }
+
+    // Check savings calculation
+    const calculatedSavings = data.originalTotal - data.optimizedTotal;
+    const savingsDifference = Math.abs(calculatedSavings - data.totalSavings);
+
+    if (savingsDifference > 1) {
+        errors.push(`Total savings (${data.totalSavings}) does not match calculated savings (${calculatedSavings.toFixed(2)})`);
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors,
+        warnings: errors.length > 0 ? ['Currency calculations may be incorrect'] : []
+    };
+};
+
+/**
+ * Validate confidence scores
+ * Ensures not all items are marked as high confidence
+ */
+export const validateConfidenceScores = (items) => {
+    const confidenceCounts = { high: 0, medium: 0, low: 0 };
+
+    for (const item of items) {
+        if (item.confidence) {
+            confidenceCounts[item.confidence] = (confidenceCounts[item.confidence] || 0) + 1;
+        }
+    }
+
+    const totalItems = items.length;
+    const highConfidenceRatio = confidenceCounts.high / totalItems;
+
+    // If more than 90% are "high confidence", it's suspicious
+    const warnings = [];
+    if (highConfidenceRatio > 0.9 && totalItems > 5) {
+        warnings.push('Most items marked as high confidence - AI may be overconfident. Review carefully.');
+    }
+
+    return {
+        valid: true,
+        warnings,
+        stats: confidenceCounts
+    };
+};
+
+/**
+ * Comprehensive validation of analysis response
+ * Runs all validation checks
+ */
+export const validateCompleteAnalysis = (data, detectionData = null) => {
+    const errors = [];
+    const warnings = [];
+
+    // Basic structure validation
+    const structureCheck = validateAnalysisResponse(data);
+    if (!structureCheck.valid) {
+        errors.push(structureCheck.error);
+        return { valid: false, errors, warnings };
+    }
+
+    // Price range validation
+    const priceCheck = validatePriceRanges(data.items);
+    if (!priceCheck.valid) {
+        errors.push(...priceCheck.errors);
+    }
+    warnings.push(...priceCheck.warnings);
+
+    // Currency consistency validation
+    const currencyCheck = validateCurrencyConsistency(data);
+    if (!currencyCheck.valid) {
+        errors.push(currencyCheck.error);
+    }
+    warnings.push(...currencyCheck.warnings);
+
+    // Confidence score validation
+    const confidenceCheck = validateConfidenceScores(data.items);
+    warnings.push(...confidenceCheck.warnings);
+
+    // Location validation if detection data provided
+    if (detectionData && detectionData.warnings) {
+        warnings.push(...detectionData.warnings);
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors,
+        warnings,
+        stats: {
+            itemCount: data.items.length,
+            totalSavings: data.totalSavings,
+            savingsPercentage: data.savingsPercentage
+        }
+    };
 };
