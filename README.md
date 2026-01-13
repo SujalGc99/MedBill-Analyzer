@@ -61,12 +61,20 @@ Currently supports:
 
 ## 📸 UI/UX Showcase
 
-### 🏠 Homepage - Upload & Select Countries
-![Homepage](./public/screenshots/home-page.png)
-*Clean, intuitive interface with country selection and drag-and-drop upload*
+### Landing Page
+![Landing](screenshots/1-landing-hero.png?v=final)
 
-### 📊 Analysis Results - Detailed Breakdown
-![Analysis Results](./public/screenshots/results-nepali.png)
+### Upload & Analysis
+<div style="display: flex; gap: 10px;">
+  <img src="screenshots/2-upload-page.png?v=final" width="49%"/>
+  <img src="screenshots/3-analysis-loading.png?v=final" width="49%"/>
+</div>
+
+### Results Dashboard
+![Results](screenshots/4-results-dashboard.png?v=final)
+
+### Fair Receipt
+![Receipt](screenshots/5-fair-receipt.png?v=final)
 *Comprehensive analysis with location mismatch warnings, savings breakdown, and fair price recommendations*
 
 ### 📜 History - Track Your Analyses
