@@ -59,33 +59,20 @@ Currently supports:
 
 ---
 
-## 📸 UI/UX Showcase
-
 ## 📸 Screenshots
 
 <div align="center">
 
-### Landing Page
-<img src="screenshots/1-landing-hero.png?v=final2" width="100%" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" alt="Landing Page"/>
+### 🏠 Landing Page
+<img src="screenshots/1-landing-hero.png" width="100%" alt="Landing Page"/>
 <br/><br/>
 
-### Upload & Analysis Process
-<div style="display: flex; gap: 10px; justify-content: center;">
-  <img src="screenshots/2-upload-page.png?v=final" width="48%" style="border-radius: 8px;"/>
-  <img src="screenshots/3-analysis-loading.png?v=final" width="48%" style="border-radius: 8px;"/>
-</div>
-<br/>
-
-### Results Dashboard
-<img src="screenshots/4-results-dashboard.png?v=final2" width="100%" style="border-radius: 8px;" alt="Results"/>
+### 📊 Analysis Results
+<img src="screenshots/4-results-dashboard.png" width="100%" alt="Results Dashboard"/>
 <br/><br/>
 
-### Fair Receipt
-<img src="screenshots/5-fair-receipt.png?v=final" width="100%" style="border-radius: 8px;" alt="Receipt"/>
-<br/><br/>
-
-### Meet the Developer
-<img src="screenshots/8-developer-page.png?v=final" width="100%" style="border-radius: 8px;" alt="Developer Page"/>
+### 👨‍💻 Meet the Developer
+<img src="screenshots/5-developer-page.png" width="100%" alt="Developer Page"/>
 
 </div>
 *Comprehensive analysis with location mismatch warnings, savings breakdown, and fair price recommendations*
