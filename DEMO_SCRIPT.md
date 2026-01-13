@@ -24,7 +24,7 @@
 
 "MedBill Analyzer is an AI-powered platform that decodes medical bills, benchmarks prices against fair market rates, and empowers patients to negotiate savings."
 
-"It's built with **React**, **Tailwind**, and powered by **Claude 3.5 Sonnet** and **GPT-4 Vision**. It's privacy-first, verified by over 500 test cases, and works globally."
+"It's built with **React**, **Tailwind**, and powered by **Qwen 2.5 VL 72B**. It's privacy-first, verified by over 500 test cases, and works globally."
 
 ---
 
@@ -72,8 +72,8 @@
 *(Switch to 'Tech Stack' or 'Developer' page)*
 
 "Technically, we're using a **multi-agent AI pipeline**:
-- **GPT-4 Vision** handles the messy OCR and handwriting.
-- **Claude 3.5 Sonnet** acts as the medical auditor, applying reasoning to detect bundles and unbundling schemes."
+- **Qwen 2.5 VL 72B** handles the messy OCR and handwriting.
+- **Qwen 2.5 VL 72B** acts as the medical auditor, applying reasoning to detect bundles and unbundling schemes."
 
 "The frontend is optimized for performance with **Framer Motion** for these smooth interactions, ensuring a premium user experience."
 

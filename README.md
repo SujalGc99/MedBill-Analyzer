@@ -153,7 +153,7 @@ Now open `.env` file in any text editor and add your API key:
 VITE_OPENROUTER_API_KEY=your_api_key_here_from_openrouter
 VITE_APP_NAME=MedBill Analyzer
 VITE_DEFAULT_COUNTRY=Nepal
-VITE_DEFAULT_MODEL=anthropic/claude-3.5-sonnet
+VITE_DEFAULT_MODEL=qwen/qwen2.5-vl-72b-instruct
 ```
 
 **Replace `your_api_key_here_from_openrouter` with your actual key!**
@@ -288,7 +288,7 @@ Edit `.env`:
 VITE_DEFAULT_MODEL=qwen/qwen-2.5-vl-7b-instruct:free
 
 # Paid model (faster and more accurate)
-VITE_DEFAULT_MODEL=anthropic/claude-3.5-sonnet
+VITE_DEFAULT_MODEL=qwen/qwen2.5-vl-72b-instruct
 ```
 
 ### Add New Country
@@ -347,7 +347,7 @@ npm run dev
 
 - **Frontend**: React 18 + Vite
 - **Styling**: Tailwind CSS
-- **AI**: OpenRouter API (Claude 3.5 Sonnet)
+- **AI**: OpenRouter API (Qwen 2.5 VL 72B)
 - **Icons**: Lucide React
 - **PDF**: jsPDF + html2canvas
 - **Charts**: Recharts
@@ -412,7 +412,7 @@ Feel free to use, modify, and distribute as you like. Just give credit where it'
 ## 🙏 Acknowledgments
 
 - **OpenRouter** for making AI accessible
-- **Anthropic** for Claude AI
+- **Qwen** for their powerful Qwen 2.5 VL 72B model
 - **React & Vite** for amazing developer experience
 - **Tailwind CSS** for beautiful styling
 - **Everyone** who gave feedback and helped me learn
@@ -478,7 +478,7 @@ A: Yes! The app is free. You just need your own OpenRouter API key (they have fr
 A: No! Everything happens in your browser. Nothing is sent to any server except OpenRouter for AI analysis.
 
 **Q: How accurate is the AI?**  
-A: Pretty good! But it's based on training data, not real-time prices. For best results, use paid models like Claude.
+A: Pretty good! But it's based on training data, not real-time prices. For best results, use powerful models like Qwen 2.5 VL 72B.
 
 **Q: Can I use this commercially?**  
 A: Yes! MIT license allows commercial use. Just give credit.

@@ -23,7 +23,7 @@ export const detectBillLocation = async (imageBase64) => {
     }
 
     const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-    const model = import.meta.env.VITE_DEFAULT_MODEL || 'anthropic/claude-3.5-sonnet';
+    const model = import.meta.env.VITE_DEFAULT_MODEL || 'qwen/qwen2.5-vl-72b-instruct';
 
     try {
         const response = await fetch(API_URL, {
@@ -114,7 +114,7 @@ export const analyzeReceipt = async (imageBase64, targetCountry = 'Nepal', origi
     }
 
     const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-    const model = modelOverride || import.meta.env.VITE_DEFAULT_MODEL || 'anthropic/claude-3.5-sonnet';
+    const model = modelOverride || import.meta.env.VITE_DEFAULT_MODEL || 'qwen/qwen2.5-vl-72b-instruct';
 
     try {
         const response = await fetch(API_URL, {
