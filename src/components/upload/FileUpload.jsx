@@ -1,7 +1,7 @@
-// File Upload Component with drag-and-drop
-
+// File Upload Component with drag-and-drop and animations
 import { useState, useCallback } from 'react';
-import { Upload, FileImage, AlertCircle } from 'lucide-react';
+import { Upload, FileImage, AlertCircle, FileText, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { validateImage } from '../../utils/validation';
 
 export const FileUpload = ({ onFileSelect, disabled = false }) => {
@@ -10,13 +10,11 @@ export const FileUpload = ({ onFileSelect, disabled = false }) => {
 
     const handleFile = useCallback((file) => {
         setError(null);
-
         const validation = validateImage(file);
         if (!validation.valid) {
             setError(validation.error);
             return;
         }
-
         onFileSelect(file);
     }, [onFileSelect]);
 
@@ -24,21 +22,15 @@ export const FileUpload = ({ onFileSelect, disabled = false }) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
-
         if (disabled) return;
-
         const file = e.dataTransfer.files[0];
-        if (file) {
-            handleFile(file);
-        }
+        if (file) handleFile(file);
     }, [disabled, handleFile]);
 
     const handleDragOver = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (!disabled) {
-            setIsDragging(true);
-        }
+        if (!disabled) setIsDragging(true);
     }, [disabled]);
 
     const handleDragLeave = useCallback((e) => {
@@ -48,36 +40,36 @@ export const FileUpload = ({ onFileSelect, disabled = false }) => {
     }, []);
 
     const handleClick = () => {
-        if (!disabled) {
-            document.getElementById('file-input').click();
-        }
+        if (!disabled) document.getElementById('file-input').click();
     };
 
     const handleInputChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            handleFile(file);
-        }
+        if (file) handleFile(file);
     };
 
     return (
         <div className="w-full">
-            {/* Drop Zone */}
-            <div
+            <motion.div
                 onClick={handleClick}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
+                animate={{
+                    borderColor: isDragging ? 'var(--primary-500)' : 'rgba(226, 232, 240, 1)',
+                    backgroundColor: isDragging ? 'rgba(240, 249, 255, 0.5)' : 'rgba(255, 255, 255, 0.4)',
+                    scale: isDragging ? 1.02 : 1,
+                }}
+                transition={{ duration: 0.2 }}
                 className={`
-          relative border-2 border-dashed rounded-xl p-12 
-          transition-all duration-200 cursor-pointer
-          ${isDragging
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-neutral-300 bg-neutral-50 hover:border-primary-400 hover:bg-primary-50'
-                    }
-          ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
+                    relative border-2 border-dashed rounded-xl p-10 
+                    transition-all duration-200 cursor-pointer overflow-hidden
+                    ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-400/70 hover:bg-white/60'}
+                `}
             >
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#2563eb_1px,transparent_1px)] [background-size:16px_16px]" />
+
                 <input
                     id="file-input"
                     type="file"
@@ -87,43 +79,55 @@ export const FileUpload = ({ onFileSelect, disabled = false }) => {
                     className="hidden"
                 />
 
-                <div className="flex flex-col items-center gap-4 text-center">
-                    {isDragging ? (
-                        <FileImage className="h-16 w-16 text-primary-500 animate-bounce" />
-                    ) : (
-                        <Upload className="h-16 w-16 text-neutral-400" />
-                    )}
+                <div className="relative flex flex-col items-center gap-5 text-center z-10">
+                    <motion.div
+                        animate={{
+                            y: isDragging ? -5 : 0,
+                            rotate: isDragging ? [0, -10, 10, 0] : 0
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className={`p-4 rounded-2xl ${isDragging ? 'bg-primary-100 text-primary-600' : 'bg-neutral-100 text-neutral-400'}`}
+                    >
+                        {isDragging ? (
+                            <FileImage className="h-10 w-10" />
+                        ) : (
+                            <Upload className="h-10 w-10" />
+                        )}
+                    </motion.div>
 
                     <div>
-                        <p className="text-lg font-medium text-neutral-700 mb-1">
-                            {isDragging ? 'Drop your receipt here' : 'Upload Receipt Image'}
-                        </p>
+                        <h3 className="text-lg font-display font-semibold text-neutral-800 mb-1">
+                            {isDragging ? 'Drop it here!' : 'Upload Medical Bill'}
+                        </h3>
                         <p className="text-sm text-neutral-500">
-                            Click to browse or drag and drop
-                        </p>
-                        <p className="text-xs text-neutral-400 mt-2">
-                            Supports JPG, PNG, WEBP (Max 5MB)
+                            Drag & drop or click to browse
                         </p>
                     </div>
 
-                    <div className="flex gap-2 mt-2">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-success-100 text-success-700">
-                            ✓ Printed receipts
+                    <div className="flex flex-wrap justify-center gap-2 mt-2">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-success-50 text-success-700 border border-success-100">
+                            <Check className="w-3 h-3" /> JPG/PNG
                         </span>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-success-100 text-success-700">
-                            ✓ Handwritten bills
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-secondary-50 text-secondary-700 border border-secondary-100">
+                            <Check className="w-3 h-3" /> Handwritten
                         </span>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
-            {/* Error Message */}
-            {error && (
-                <div className="mt-4 p-4 bg-danger-50 border border-danger-200 rounded-lg flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-danger-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-danger-700">{error}</p>
-                </div>
-            )}
+            <AnimatePresence>
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-3 p-3 bg-danger-50 border border-danger-200 rounded-lg flex items-start gap-2 text-sm text-danger-700"
+                    >
+                        <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                        <span>{error}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

@@ -126,7 +126,9 @@ export const useAnalysis = () => {
         loading,
         error,
         result,
+        setResult,
         progress,
+        setProgress,
     };
 };
 

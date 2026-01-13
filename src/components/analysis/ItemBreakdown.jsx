@@ -33,15 +33,14 @@ export const ItemBreakdown = ({ item, country = 'Nepal' }) => {
                         <h3 className="font-semibold text-sm sm:text-base text-neutral-900 leading-tight">{name}</h3>
                     </div>
 
-                    <div className="text-xs sm:text-sm text-neutral-600 ml-6 sm:ml-7 space-y-1">
-                        <p className="flex flex-wrap items-center gap-1">
-                            <span className="font-medium whitespace-nowrap">{t('analysis.charged')}: </span>
-                            <span className="font-semibold">{formatCurrency(chargedPrice)}</span>
-                        </p>
-                        <p className="flex flex-wrap items-center gap-1">
-                            <span className="font-medium whitespace-nowrap">{t('analysis.fairRange')}: </span>
-                            <span>{formatCurrency(fairPriceMin)} - {formatCurrency(fairPriceMax)}</span>
-                        </p>
+                    <div className="text-xs sm:text-sm text-neutral-600 ml-6 sm:ml-7 mt-2">
+                        <div className="grid grid-cols-[auto,1fr] gap-x-3 gap-y-1">
+                            <span className="font-medium text-neutral-500 text-right">{t('analysis.charged')}:</span>
+                            <span className={`font-semibold ${isOverpriced ? 'text-warning-700' : 'text-neutral-900'}`}>{formatCurrency(chargedPrice)}</span>
+
+                            <span className="font-medium text-neutral-500 text-right">{t('analysis.fairRange')}:</span>
+                            <span className="text-neutral-700 font-medium">{formatCurrency(fairPriceMin)} - {formatCurrency(fairPriceMax)}</span>
+                        </div>
                     </div>
                 </div>
 

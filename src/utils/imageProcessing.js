@@ -4,15 +4,26 @@
  * Validates if file is a supported image type
  */
 export const validateImageFile = (file) => {
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
     const maxSize = 5 * 1024 * 1024; // 5MB
 
     if (!file) {
         return { valid: false, error: 'No file selected' };
     }
 
-    if (!validTypes.includes(file.type)) {
-        return { valid: false, error: 'Invalid file type. Please upload JPG, PNG, or WEBP.' };
+    // Check MIME type (permissive check for any image)
+    const isImageType = file.type.startsWith('image/');
+
+    // Fallback: Check extension if MIME type is missing or generic (e.g. application/octet-stream)
+    const fileName = file.name.toLowerCase();
+    const extension = fileName.split('.').pop();
+    const isValidExtension = validExtensions.includes(extension);
+
+    if (!isImageType && !isValidExtension) {
+        return {
+            valid: false,
+            error: `Invalid file type (${file.type || 'unknown'}). Please upload JPG, PNG, or WEBP.`
+        };
     }
 
     if (file.size > maxSize) {
@@ -108,7 +119,7 @@ export const processImage = async (file) => {
     // Compress if needed
     let processedFile = file;
     if (file.size > 1024 * 1024) { // If larger than 1MB, compress
-        processedFile = await compressImage(file);
+        processedFile = await compressImage(file, 1280, 0.8);
     }
 
     // Convert to base64

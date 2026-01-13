@@ -69,9 +69,14 @@ export const validateImage = (file) => {
         return { valid: false, error: 'No file provided' };
     }
 
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-        return { valid: false, error: 'Invalid file type. Please upload an image.' };
+    // Permissive validation: Check MIME type OR extension
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+    const isImageType = file.type.startsWith('image/');
+    const extension = file.name.toLowerCase().split('.').pop();
+    const isValidExtension = validExtensions.includes(extension);
+
+    if (!isImageType && !isValidExtension) {
+        return { valid: false, error: 'Invalid file type. Please upload an image (JPG, PNG, WEBP).' };
     }
 
     const maxSize = 5 * 1024 * 1024; // 5MB
