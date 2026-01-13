@@ -61,20 +61,33 @@ Currently supports:
 
 ## 📸 UI/UX Showcase
 
-### Landing Page
-![Landing](screenshots/1-landing-hero.png?v=final)
+## 📸 Screenshots
 
-### Upload & Analysis
-<div style="display: flex; gap: 10px;">
-  <img src="screenshots/2-upload-page.png?v=final" width="49%"/>
-  <img src="screenshots/3-analysis-loading.png?v=final" width="49%"/>
+<div align="center">
+
+### Landing Page
+<img src="screenshots/1-landing-hero.png?v=final2" width="100%" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" alt="Landing Page"/>
+<br/><br/>
+
+### Upload & Analysis Process
+<div style="display: flex; gap: 10px; justify-content: center;">
+  <img src="screenshots/2-upload-page.png?v=final" width="48%" style="border-radius: 8px;"/>
+  <img src="screenshots/3-analysis-loading.png?v=final" width="48%" style="border-radius: 8px;"/>
 </div>
+<br/>
 
 ### Results Dashboard
-![Results](screenshots/4-results-dashboard.png?v=final)
+<img src="screenshots/4-results-dashboard.png?v=final2" width="100%" style="border-radius: 8px;" alt="Results"/>
+<br/><br/>
 
 ### Fair Receipt
-![Receipt](screenshots/5-fair-receipt.png?v=final)
+<img src="screenshots/5-fair-receipt.png?v=final" width="100%" style="border-radius: 8px;" alt="Receipt"/>
+<br/><br/>
+
+### Meet the Developer
+<img src="screenshots/8-developer-page.png?v=final" width="100%" style="border-radius: 8px;" alt="Developer Page"/>
+
+</div>
 *Comprehensive analysis with location mismatch warnings, savings breakdown, and fair price recommendations*
 
 ### 📜 History - Track Your Analyses
